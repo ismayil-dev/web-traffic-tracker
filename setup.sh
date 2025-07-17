@@ -53,15 +53,18 @@ install_dependencies() {
         exit 1
     fi
     
-    echo "Installing Frontend dependencies..."
-    if docker exec traffic-tracker-frontend npm install; then
-        echo "Frontend dependencies installed"
-        docker exec -d traffic-tracker-frontend npm run dev -- --host 0.0.0.0
-        echo "Frontend dev server started"
-    else
-        echo "Failed to install Frontend dependencies"
-        exit 1
-    fi
+    echo "Frontend dependencies will be installed automatically..."
+    echo "Waiting for frontend container to be ready..."
+    sleep 5
+    
+    for i in {1..30}; do
+        if docker logs traffic-tracker-frontend 2>&1 | grep -q "ready in"; then
+            echo "Frontend dev server is ready"
+            break
+        fi
+        echo "Waiting for frontend dev server... ($i/30)"
+        sleep 2
+    done
     
     echo "Installing Tracker dependencies..."
     if docker exec traffic-tracker-tracker npm install; then
