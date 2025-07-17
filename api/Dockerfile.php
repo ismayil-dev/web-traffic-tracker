@@ -15,19 +15,11 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy composer files
-COPY composer.json composer.lock* ./
-
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy application code
 COPY . .
-
-# .env file will be mounted as volume in docker-compose
-
-# Install PHP dependencies (after copying source code)
-RUN composer install --optimize-autoloader --no-dev
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \

@@ -31,7 +31,6 @@ services:
     volumes:
       - ./api:/var/www/html
       - ./api/.env:/var/www/html/.env
-      - /var/www/html/vendor
     networks:
       - traffic-tracker
 
@@ -63,7 +62,6 @@ services:
       - api
     volumes:
       - ./frontend:/app
-      - /app/node_modules
       - ./frontend/.env:/app/.env
     networks:
       - traffic-tracker
@@ -79,7 +77,6 @@ services:
       - "8080:80"
     volumes:
       - ./tracker:/app
-      - /app/node_modules
       - ./tracker/.env:/app/.env
     networks:
       - traffic-tracker

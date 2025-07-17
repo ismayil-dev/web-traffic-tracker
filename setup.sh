@@ -1,33 +1,114 @@
 #!/bin/bash
-echo "Setting up Web Traffic Tracker..."
 
-setup_env_file() {
-    local dir=$1
+echo "Setting up Traffic Tracker..."
 
-    if [ -f "$dir/.env.example" ]; then
-        if [ ! -f "$dir/.env" ]; then
-            cp "$dir/.env.example" "$dir/.env"
-            echo -e "Created $dir/.env from .env.example"
-        else
-            echo -e "$dir/.env already exists, skipping"
-        fi
-    else
-        echo -e "$dir/.env.example not found"
+check_docker() {
+    if ! command -v docker &> /dev/null; then
+        echo "Docker is not installed. Please install Docker first."
+        exit 1
+    fi
+    
+    if ! command -v docker-compose &> /dev/null; then
+        echo "Docker Compose is not installed. Please install Docker Compose first."
+        exit 1
     fi
 }
 
-# Setup .env files for each service
-setup_env_file "./api"
-setup_env_file "./frontend"
-setup_env_file "./tracker"
+create_env_files() {
+    echo "Creating environment files..."
+    
+    for dir in api frontend tracker; do
+        if [ -f "./$dir/.env.example" ]; then
+            if [ ! -f "./$dir/.env" ]; then
+                cp "./$dir/.env.example" "./$dir/.env"
+                echo "Created $dir/.env"
+            fi
+        fi
+    done
+}
 
-echo ""
-echo "Configuration files created:"
-echo "- api/.env (API configuration)"
-echo "- frontend/.env (Frontend configuration)"
-echo "- tracker/.env (Tracker configuration)"
+start_containers() {
+    echo "Starting Docker containers..."
+    docker-compose up -d
+    
+    echo "Waiting for containers to be ready..."
+    sleep 10
+    
+    for i in {1..30}; do
+        if docker exec traffic-tracker-php php --version > /dev/null 2>&1; then
+            echo "PHP container is ready"
+            break
+        fi
+        echo "Waiting for PHP container... ($i/30)"
+        sleep 2
+    done
+}
 
-echo "Starting the application..."
-docker-compose up -d
-echo ""
-echo -e "Setup complete!"
+install_dependencies() {
+    echo "Installing PHP dependencies..."
+    if docker exec traffic-tracker-php composer install --optimize-autoloader; then
+        echo "PHP dependencies installed"
+    else
+        echo "Failed to install PHP dependencies"
+        exit 1
+    fi
+    
+    echo "Installing Frontend dependencies..."
+    if docker exec traffic-tracker-frontend npm install; then
+        echo "Frontend dependencies installed"
+        docker exec -d traffic-tracker-frontend npm run dev -- --host 0.0.0.0
+        echo "Frontend dev server started"
+    else
+        echo "Failed to install Frontend dependencies"
+        exit 1
+    fi
+    
+    echo "Installing Tracker dependencies..."
+    if docker exec traffic-tracker-tracker npm install; then
+        echo "Tracker dependencies installed"
+    else
+        echo "Failed to install Tracker dependencies"
+        exit 1
+    fi
+    
+    echo "Building tracker..."
+    if docker exec traffic-tracker-tracker npm run build; then
+        echo "Tracker built successfully"
+    else
+        echo "Failed to build tracker"
+        exit 1
+    fi
+    
+    echo "Setting up tracker files..."
+    docker exec traffic-tracker-tracker cp -r /app/dist /usr/share/nginx/html/dist
+    docker exec traffic-tracker-tracker cp /app/example.html /usr/share/nginx/html/index.html
+    echo "Tracker files copied to nginx"
+}
+
+restart_services() {
+    echo "Restarting services..."
+    docker-compose restart frontend tracker
+}
+
+show_summary() {
+    echo ""
+    echo "Setup Complete!"
+    echo ""
+    echo "Your Traffic Tracker is now running:"
+    echo "Frontend Dashboard: http://localhost:3000"
+    echo "API Backend:        http://localhost:8001"
+    echo "Tracker Example:    http://localhost:8080"
+    echo "Database:           localhost:3307"
+    echo ""
+}
+
+main() {
+    check_docker
+    create_env_files
+    start_containers
+    install_dependencies
+    restart_services
+    show_summary
+}
+
+main
