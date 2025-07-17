@@ -1,0 +1,25 @@
+{
+  "name": "traffic-tracker-client",
+  "version": "1.0.0",
+  "description": "JavaScript traffic tracker",
+  "main": "dist/tracker.min.js",
+  "type": "module",
+  "scripts": {
+    "build": "webpack --config build/webpack.cjs",
+    "clean": "rm -rf dist/*"
+  },
+  "keywords": [
+    "analytics",
+    "tracking",
+    "javascript"
+  ],
+  "author": "Ismayil Aliyev",
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/preset-env": "^7.22.0",
+    "babel-loader": "^9.1.0",
+    "dotenv": "^17.2.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.0"
+  }
+}

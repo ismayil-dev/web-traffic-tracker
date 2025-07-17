@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Tracker Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto max-w-4xl px-6 py-8">
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2 text-center">Traffic Tracker</h1>
+            <p class="text-gray-600 text-center text-lg mb-8">URL Change Detection Example</p>
+            
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 mb-8 text-white">
+                <h2 class="text-2xl font-semibold mb-4 flex items-center">
+                    Current URL
+                </h2>
+                <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 space-y-2">
+                    <p id="current-url" class="font-mono text-sm break-all"></p>
+                    <p id="current-path" class="font-mono text-sm opacity-90"></p>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                    Test URL Changes
+                </h2>
+                <p class="text-gray-600 mb-6">These buttons will trigger URL changes. Notice how query parameter changes are ignored:</p>
+                
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="changePath('/page1')" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Go to /page1
+                    </button>
+                    <button onclick="changePath('/page2')" class="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Go to /page2
+                    </button>
+                    <button onclick="changePath('/page1')" class="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Back to /page1
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./dist/tracker.min.js" data-api-key="0119e8117599a389782322913f7e1353df3079811f5484b975e005ddd18306a1">
+    </script>
+    <script>
+        function updateDisplay() {
+            document.getElementById('current-url').textContent = `URL: ${window.location.href}`;
+            document.getElementById('current-path').textContent = `Path: ${window.location.pathname}`;
+        }
+        
+        window.changePath = function(path) {
+            history.pushState(null, null, path);
+            updateDisplay();
+        };
+        
+        updateDisplay();
+    </script>
+</body>
+</html>
