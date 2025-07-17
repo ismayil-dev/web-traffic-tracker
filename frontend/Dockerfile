@@ -13,6 +13,8 @@ RUN npm install
 # Copy source code
 COPY . .
 
+# .env file will be mounted as volume in docker-compose
+
 # Expose port 5173
 EXPOSE 5173
 

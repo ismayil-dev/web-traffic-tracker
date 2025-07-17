@@ -21,14 +21,13 @@ COPY composer.json composer.lock* ./
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install PHP dependencies
-RUN composer install --no-scripts --no-autoloader --no-dev
-
 # Copy application code
 COPY . .
 
-# Generate autoloader
-RUN composer dump-autoload --optimize
+# .env file will be mounted as volume in docker-compose
+
+# Install PHP dependencies (after copying source code)
+RUN composer install --optimize-autoloader --no-dev
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
