@@ -1,3 +1,4 @@
 vendor
 .env
 generate_demo_token.php
+logs/app.log
