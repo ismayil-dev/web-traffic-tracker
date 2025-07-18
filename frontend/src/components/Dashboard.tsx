@@ -6,6 +6,7 @@ import { TrafficChart } from './TrafficChart';
 import { TopPages } from './TopPages';
 import { VisitorBreakdown } from './VisitorBreakdown';
 import { RecentVisits } from './RecentVisits';
+import { OverallStats } from './OverallStats';
 import { BarChart3, Users, Globe, Activity, Calendar } from 'lucide-react';
 import {Period} from "@/lib/period.ts";
 
@@ -109,7 +110,12 @@ export function Dashboard() {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Metrics Cards */}
+        {/* Overall Stats - All Time */}
+        <div className="mb-8">
+          <OverallStats />
+        </div>
+
+        {/* Metrics Cards - Period Based */}
         <div className="mb-8">
           <MetricsCards 
             period={selectedPeriod} 

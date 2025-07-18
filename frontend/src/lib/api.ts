@@ -54,6 +54,13 @@ interface AnalyticsStats {
   };
 }
 
+interface OverallStats {
+  total_visits: number;
+  unique_visitors: number;
+  tracking_since: string;
+  last_activity: string;
+}
+
 interface ApiError {
   message: string;
   errors?: string[];
@@ -176,7 +183,11 @@ class ApiClient {
     
     return await this.makeRequest<AnalyticsStats>(endpoint);
   }
+
+  async getOverallStats(): Promise<OverallStats> {
+    return await this.makeRequest<OverallStats>('/analytics/summary');
+  }
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);
-export type { TopPage, VisitorBreakdownItem, VisitorBreakdownResponse, RecentVisit, HistoricalDataItem, AnalyticsStats };
+export type { TopPage, VisitorBreakdownItem, VisitorBreakdownResponse, RecentVisit, HistoricalDataItem, AnalyticsStats, OverallStats };
