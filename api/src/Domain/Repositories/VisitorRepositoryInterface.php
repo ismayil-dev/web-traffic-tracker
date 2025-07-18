@@ -24,4 +24,6 @@ interface VisitorRepositoryInterface
     public function getOSStats(int $domainId): array;
 
     public function getDeviceStats(int $domainId): array;
+
+    public function getOverallAnalytics(int $domainId): array;
 }

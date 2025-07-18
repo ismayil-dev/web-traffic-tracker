@@ -150,4 +150,26 @@ class VisitorRepository extends BaseRepository implements VisitorRepositoryInter
             return $row;
         }, $results);
     }
+
+    /**
+     * @param int $domainId
+     * @return array{unique_visitors: int, total_visits: int, tracking_since: string, last_activity: string}
+     */
+    public function getOverallAnalytics(int $domainId): array
+    {
+        $sql = new SqlBuilder();
+        $sql->append('SELECT COUNT(*) as unique_visitors, SUM(total_visits) as total_visits, MIN(first_visit) as tracking_since, MAX(last_visit) as last_activity FROM unique_visitors');
+        $sql->append('WHERE domain_id = :domain_id');
+        $stmt = $this->db->prepare($sql->getQuery());
+        $stmt->bindValue(':domain_id', $domainId);
+        $stmt->execute();
+        $result = $stmt->fetchObject();
+
+        return [
+            'unique_visitors' => (int) $result->unique_visitors,
+            'total_visits' => (int) $result->total_visits,
+            'tracking_since' => $result->tracking_since,
+            'last_activity' => $result->last_activity,
+        ];
+    }
 }

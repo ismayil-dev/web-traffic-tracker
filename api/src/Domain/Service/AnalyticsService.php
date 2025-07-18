@@ -8,6 +8,7 @@ use DateMalformedStringException;
 use TrafficTracker\Domain\Contract\AnalyticsStatsContract;
 use TrafficTracker\Domain\DataTransferObject\AnalyticsStatsDto;
 use TrafficTracker\Domain\DataTransferObject\DateRangeStatsDto;
+use TrafficTracker\Domain\DataTransferObject\OverallAnalyticsStatsDto;
 use TrafficTracker\Domain\DataTransferObject\TopPageStatsDto;
 use TrafficTracker\Domain\DataTransferObject\VisitorBreakDownCollectionDto;
 use TrafficTracker\Domain\DataTransferObject\VisitorBreakDownStatsDto;
@@ -166,6 +167,21 @@ readonly class AnalyticsService
     public function getHistoricalData(Domain $domain, DatePeriod $datePeriod): array
     {
         return $this->dailyStatsRepository->findByDateRange($domain->getId(), $datePeriod);
+    }
+
+    /**
+     * @throws DateMalformedStringException
+     */
+    public function getOverallAnalytics(Domain $domain): OverallAnalyticsStatsDto
+    {
+        $result = $this->visitorRepository->getOverallAnalytics($domain->getId());
+
+        return new OverallAnalyticsStatsDto(
+            total_visits: $result['total_visits'],
+            unique_visitors: $result['unique_visitors'],
+            trackingSince: new DateTimeImmutable($result['tracking_since']),
+            lastActivity: new DateTimeImmutable($result['last_activity'])
+        );
     }
 
     private function getDatePeriodForPeriod(Period $period): ?DatePeriod

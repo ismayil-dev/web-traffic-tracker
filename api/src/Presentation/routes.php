@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 
 use TrafficTracker\Presentation\Controller\AnalyticsController;
+use TrafficTracker\Presentation\Controller\OverallAnalyticsController;
 use TrafficTracker\Presentation\Controller\TopPagesController;
 use TrafficTracker\Presentation\Controller\VisitorBreakdownController;
 use TrafficTracker\Presentation\Controller\RecentVisitsController;
@@ -18,6 +19,13 @@ return [
     '/api/v1/analytics' => [
         'method' => 'GET',
         'handler' => AnalyticsController::class,
+        'middleware' => [
+            UserTokenWithDomain::class,
+        ],
+    ],
+    '/api/v1/analytics/summary' => [
+        'method' => 'GET',
+        'handler' => OverallAnalyticsController::class,
         'middleware' => [
             UserTokenWithDomain::class,
         ],
