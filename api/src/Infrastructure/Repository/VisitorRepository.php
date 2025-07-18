@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TrafficTracker\Infrastructure\Repository;
 
+use PDO;
 use TrafficTracker\Domain\Entity\Visitor;
 use TrafficTracker\Domain\Repositories\VisitorRepositoryInterface;
 use TrafficTracker\Domain\ValueObject\VisitorHash;
@@ -94,5 +95,59 @@ class VisitorRepository extends BaseRepository implements VisitorRepositoryInter
         $stmt->execute();
 
         return $stmt->fetchColumn() === 1;
+    }
+
+    public function getBrowserStats(int $domainId): array
+    {
+        $sql = new SqlBuilder();
+        $sql->append('SELECT browser, browser as label, COUNT(*) as count FROM unique_visitors WHERE domain_id = :domain_id GROUP BY browser');
+        $stmt = $this->db->prepare($sql->getQuery());
+        $stmt->bindValue(':domain_id', $domainId);
+        $stmt->execute();
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $total = array_sum(array_column($results, 'count'));
+
+        return array_map(function ($row) use ($total) {
+            $row['percentage'] = $total > 0 ? round(($row['count'] / $total) * 100, 1) : 0.0;
+
+            return $row;
+        }, $results);
+    }
+
+    public function getOSStats(int $domainId): array
+    {
+        $sql = new SqlBuilder();
+        $sql->append('SELECT os, os as label, COUNT(*) as count FROM unique_visitors WHERE domain_id = :domain_id GROUP BY os');
+        $stmt = $this->db->prepare($sql->getQuery());
+        $stmt->bindValue(':domain_id', $domainId);
+        $stmt->execute();
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $total = array_sum(array_column($results, 'count'));
+
+        return array_map(function ($row) use ($total) {
+            $row['percentage'] = $total > 0 ? round(($row['count'] / $total) * 100, 1) : 0.0;
+
+            return $row;
+        }, $results);
+    }
+
+    public function getDeviceStats(int $domainId): array
+    {
+        $sql = new SqlBuilder();
+        $sql->append('SELECT device, device as label, COUNT(*) as count FROM unique_visitors WHERE domain_id = :domain_id GROUP BY device');
+        $stmt = $this->db->prepare($sql->getQuery());
+        $stmt->bindValue(':domain_id', $domainId);
+        $stmt->execute();
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $total = array_sum(array_column($results, 'count'));
+
+        return array_map(function ($row) use ($total) {
+            $row['percentage'] = $total > 0 ? round(($row['count'] / $total) * 100, 1) : 0.0;
+
+            return $row;
+        }, $results);
     }
 }

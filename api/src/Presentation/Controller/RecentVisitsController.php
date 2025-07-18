@@ -10,6 +10,7 @@ use TrafficTracker\Domain\Service\AnalyticsService;
 use TrafficTracker\Infrastructure\Http\RequestContext;
 use TrafficTracker\Infrastructure\Http\Response;
 use TrafficTracker\Infrastructure\Repository\DailyStatsRepository;
+use TrafficTracker\Infrastructure\Repository\VisitorRepository;
 use TrafficTracker\Infrastructure\Repository\VisitRepository;
 
 readonly class RecentVisitsController
@@ -21,7 +22,8 @@ readonly class RecentVisitsController
         $this->getRecentVisits = new GetRecentVisits(
             analyticsService: new AnalyticsService(
                 visitRepository: new VisitRepository(),
-                dailyStatsRepository: new DailyStatsRepository()
+                dailyStatsRepository: new DailyStatsRepository(),
+                visitorRepository: new VisitorRepository()
             )
         );
     }

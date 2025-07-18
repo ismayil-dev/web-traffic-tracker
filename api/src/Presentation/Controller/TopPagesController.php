@@ -14,6 +14,7 @@ use TrafficTracker\Domain\ValueObject\DatePeriod;
 use TrafficTracker\Infrastructure\Http\RequestContext;
 use TrafficTracker\Infrastructure\Http\Response;
 use TrafficTracker\Infrastructure\Repository\DailyStatsRepository;
+use TrafficTracker\Infrastructure\Repository\VisitorRepository;
 use TrafficTracker\Infrastructure\Repository\VisitRepository;
 
 readonly class TopPagesController
@@ -27,7 +28,8 @@ readonly class TopPagesController
         $this->getTopPages = new GetTopPages(
             analyticsService: new AnalyticsService(
                 visitRepository: new VisitRepository(),
-                dailyStatsRepository: new DailyStatsRepository()
+                dailyStatsRepository: new DailyStatsRepository(),
+                visitorRepository: new VisitorRepository()
             )
         );
     }

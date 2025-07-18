@@ -12,7 +12,7 @@ readonly class VisitorBreakDownRequest
 {
     public function __construct(
         public Domain $domain,
-        public Period $period,
+        public ?Period $period = null,
         public ?DatePeriod $datePeriod = null,
     ) {
     }

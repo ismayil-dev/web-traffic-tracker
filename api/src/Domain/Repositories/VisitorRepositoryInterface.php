@@ -18,4 +18,10 @@ interface VisitorRepositoryInterface
     public function findByHash(int $domainId, VisitorHash $visitorHash): ?Visitor;
 
     public function exists(int $domainId, VisitorHash $visitorHash): bool;
+
+    public function getBrowserStats(int $domainId): array;
+
+    public function getOSStats(int $domainId): array;
+
+    public function getDeviceStats(int $domainId): array;
 }

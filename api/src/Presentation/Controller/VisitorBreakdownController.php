@@ -14,6 +14,7 @@ use TrafficTracker\Domain\ValueObject\DatePeriod;
 use TrafficTracker\Infrastructure\Http\RequestContext;
 use TrafficTracker\Infrastructure\Http\Response;
 use TrafficTracker\Infrastructure\Repository\DailyStatsRepository;
+use TrafficTracker\Infrastructure\Repository\VisitorRepository;
 use TrafficTracker\Infrastructure\Repository\VisitRepository;
 
 readonly class VisitorBreakdownController
@@ -27,7 +28,8 @@ readonly class VisitorBreakdownController
         $this->getVisitorBreakDown = new GetVisitorBreakDown(
             analyticsService: new AnalyticsService(
                 visitRepository: new VisitRepository(),
-                dailyStatsRepository: new DailyStatsRepository()
+                dailyStatsRepository: new DailyStatsRepository(),
+                visitorRepository: new VisitorRepository()
             )
         );
     }
@@ -45,7 +47,7 @@ readonly class VisitorBreakdownController
             return Response::unProcessableContent($validationError);
         }
 
-        $period = !empty($data['period']) ? Period::from($data['period']) : Period::DAILY;
+        $period = !empty($data['period']) ? Period::from($data['period']) : null;
 
         $datePeriod = null;
         if (!empty($data['from']) && !empty($data['to'])) {

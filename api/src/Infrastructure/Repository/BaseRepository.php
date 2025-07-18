@@ -11,7 +11,6 @@ class BaseRepository
 {
     protected PDO $db;
 
-
     public function __construct()
     {
         $this->establishDatabaseConnection();

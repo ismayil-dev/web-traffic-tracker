@@ -15,6 +15,7 @@ use TrafficTracker\Domain\Entity\DailyStats;
 use TrafficTracker\Domain\Entity\Domain;
 use TrafficTracker\Domain\Entity\Visit;
 use TrafficTracker\Domain\Enum\VisitorBreakDown;
+use TrafficTracker\Domain\Repositories\VisitorRepositoryInterface;
 use TrafficTracker\Domain\Repositories\VisitRepositoryInterface;
 use TrafficTracker\Domain\Repositories\DailyStatsRepositoryInterface;
 use DateTimeImmutable;
@@ -26,6 +27,7 @@ readonly class AnalyticsService
     public function __construct(
         private VisitRepositoryInterface $visitRepository,
         private DailyStatsRepositoryInterface $dailyStatsRepository,
+        private VisitorRepositoryInterface $visitorRepository,
     ) {
     }
 
@@ -112,6 +114,19 @@ readonly class AnalyticsService
         $browsers = $this->visitRepository->getBrowserStats($domain->getId(), $effectiveDatePeriod);
         $operatingSystems = $this->visitRepository->getOSStats($domain->getId(), $effectiveDatePeriod);
         $devices = $this->visitRepository->getDeviceStats($domain->getId(), $effectiveDatePeriod);
+
+        return new VisitorBreakDownCollectionDto(
+            $this->mapToVisitorBreakDown(VisitorBreakDown::BROWSER, $browsers),
+            $this->mapToVisitorBreakDown(VisitorBreakDown::OS, $operatingSystems),
+            $this->mapToVisitorBreakDown(VisitorBreakDown::DEVICE, $devices),
+        );
+    }
+
+    public function getOverallVisitorBreakDown(Domain $domain): VisitorBreakDownCollectionDto
+    {
+        $browsers = $this->visitorRepository->getBrowserStats($domain->getId());
+        $operatingSystems = $this->visitorRepository->getOSStats($domain->getId());
+        $devices = $this->visitorRepository->getDeviceStats($domain->getId());
 
         return new VisitorBreakDownCollectionDto(
             $this->mapToVisitorBreakDown(VisitorBreakDown::BROWSER, $browsers),
