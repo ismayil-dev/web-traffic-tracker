@@ -157,7 +157,7 @@ export function Dashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Users className="h-5 w-5 text-purple-600" />
-                  <span>Browser Breakdown</span>
+                  <span>Visitor Breakdown</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
