@@ -126,6 +126,8 @@ The system uses MySQL with the following main tables:
 
 **Missing dependencies**: If you encounter issues with missing packages, rebuild the containers with `docker-compose build --no-cache`.
 
+**Invalid API key errors**: If frontend API requests fail due to invalid API key, run `php generate_demo_token.php` in the api directory, then copy the generated token and paste it in `frontend/.env` file as `VITE_API_TOKEN`.
+
 ## Development Notes
 
 The application is designed for development with Docker. All services restart automatically on failure, and configuration changes can be made by editing the respective `.env` files.
