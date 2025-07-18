@@ -111,6 +111,7 @@ main() {
     start_containers
     install_dependencies
     restart_services
+    ./setup_demo_token.sh
     show_summary
 }
 

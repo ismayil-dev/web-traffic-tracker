@@ -12,5 +12,4 @@ $demoUserEmail = 'admin@yomali.com';
 
 $token = JwtService::generateToken($demoUserId, $demoUserEmail);
 
-echo "Use this token in your frontend:\n";
-echo "Authorization: Bearer " . $token . "\n\n";
+echo $token . "\n\n";
