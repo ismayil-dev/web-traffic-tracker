@@ -133,7 +133,7 @@ export function Dashboard() {
                   <span>Traffic Overview</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className={"overflow-auto pb-6"}>
                 <TrafficChart 
                   period={selectedPeriod} 
                   customDates={selectedPeriod === Period.CUSTOM ? appliedCustomDates : null}

@@ -132,7 +132,7 @@ class ApiClient {
     if (params?.to) searchParams.append('to', params.to);
 
     const query = searchParams.toString();
-    const endpoint = `/analytics/visitor-breakdown${query ? `?${query}` : ''}`;
+    const endpoint = `/analytics/visitor-breakdown`;
     
     return this.makeRequest<VisitorBreakdownResponse>(endpoint);
   }

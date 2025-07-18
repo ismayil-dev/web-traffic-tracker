@@ -175,12 +175,14 @@ readonly class AnalyticsService
     public function getOverallAnalytics(Domain $domain): OverallAnalyticsStatsDto
     {
         $result = $this->visitorRepository->getOverallAnalytics($domain->getId());
+        $trackingSince = $result['tracking_since'] ? new DateTimeImmutable($result['tracking_since']) : new DateTimeImmutable();
+        $lastActivity = $result['last_activity'] ? new DateTimeImmutable($result['last_activity']) : new DateTimeImmutable();
 
         return new OverallAnalyticsStatsDto(
             total_visits: $result['total_visits'],
             unique_visitors: $result['unique_visitors'],
-            trackingSince: new DateTimeImmutable($result['tracking_since']),
-            lastActivity: new DateTimeImmutable($result['last_activity'])
+            trackingSince:$trackingSince,
+            lastActivity: $lastActivity
         );
     }
 
