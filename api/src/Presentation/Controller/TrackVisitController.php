@@ -59,7 +59,7 @@ class TrackVisitController
 
         $result = $this->trackVisitUseCase->execute($request, RequestContext::getDomain());
 
-        return Response::success($result->toArray());
+        return Response::created($result->toArray());
     }
 
     public function validateHttpRequest(array $data): array

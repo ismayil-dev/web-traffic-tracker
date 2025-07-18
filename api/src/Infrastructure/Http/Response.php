@@ -66,4 +66,12 @@ class Response
 
         exit;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'statusCode' => $this->statusCode,
+            'data' => $this->data,
+        ];
+    }
 }
