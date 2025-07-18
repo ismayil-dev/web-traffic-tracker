@@ -43,11 +43,12 @@ class Visit
         IpAddress $visitorIp,
         UserAgent $userAgent,
         ?string $referrer = null,
+        ?DateTimeImmutable $timestamp = null,
     ): self {
-        $visitorHash = VisitorHash::fromIpAndUserAgent($visitorIp, $userAgent->getValue());
+        $visitorHash = VisitorHash::fromIpAndUserAgent($visitorIp, $userAgent);
 
         return new self(
-            id:0,
+            id: 0,
             domainId: $domainId,
             url: $url,
             pageTitle: $pageTitle,
@@ -57,7 +58,8 @@ class Visit
             os: $userAgent->getOS(),
             device: $userAgent->getDevice(),
             visitorHash: $visitorHash,
-            referrer: $referrer
+            timestamp: $timestamp,
+            referrer: $referrer,
         );
     }
 

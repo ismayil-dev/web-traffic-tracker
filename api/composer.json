@@ -21,11 +21,13 @@
             "TrafficTracker\\Application\\": "src/Application/",
             "TrafficTracker\\Infrastructure\\": "src/Infrastructure/",
             "TrafficTracker\\Presentation\\": "src/Presentation/",
-            "TrafficTracker\\Shared\\": "src/Shared/"
+            "TrafficTracker\\Shared\\": "src/Shared/",
+            "TrafficTracker\\Tests\\": "tests/"
         }
     },
     "require-dev": {
         "symfony/var-dumper": "^7.2",
-        "friendsofphp/php-cs-fixer": "^3.82"
+        "friendsofphp/php-cs-fixer": "^3.82",
+        "phpunit/phpunit": "^12.2"
     }
 }

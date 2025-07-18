@@ -152,13 +152,12 @@ export function Dashboard() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Visitor Breakdown */}
           <div>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Users className="h-5 w-5 text-purple-600" />
-                  <span>Visitor Breakdown</span>
+                  <span>Browser Breakdown</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>

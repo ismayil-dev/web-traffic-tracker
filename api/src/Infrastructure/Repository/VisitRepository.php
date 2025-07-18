@@ -16,8 +16,8 @@ class VisitRepository extends BaseRepository implements VisitRepositoryInterface
     public function save(Visit $visit): Visit
     {
         $sql = new SqlBuilder();
-        $sql->append('INSERT INTO visits (domain_id, url, base_url, page_title, visitor_ip, user_agent, browser, os, device, visitor_hash, referrer) ');
-        $sql->append('VALUES (:domain_id, :url, :base_url, :page_title, :visitor_ip, :user_agent, :browser, :os, :device, :visitor_hash, :referrer)');
+        $sql->append('INSERT INTO visits (domain_id, url, base_url, page_title, visitor_ip, user_agent, browser, os, device, visitor_hash, referrer, timestamp) ');
+        $sql->append('VALUES (:domain_id, :url, :base_url, :page_title, :visitor_ip, :user_agent, :browser, :os, :device, :visitor_hash, :referrer, :timestamp)');
 
         $stmt = $this->db->prepare($sql->getQuery());
         $stmt->bindValue(':domain_id', $visit->getDomainId());
@@ -31,6 +31,7 @@ class VisitRepository extends BaseRepository implements VisitRepositoryInterface
         $stmt->bindValue(':device', $visit->getDevice()->value);
         $stmt->bindValue(':visitor_hash', $visit->getVisitorHash()->getValue());
         $stmt->bindValue(':referrer', $visit->getReferrer());
+        $stmt->bindValue(':timestamp', $visit->getTimestamp()->format('Y-m-d H:i:s'));
         $stmt->execute();
 
         return $this->findById($this->lastInsertId());

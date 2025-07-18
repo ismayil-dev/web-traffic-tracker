@@ -27,9 +27,9 @@ class VisitorHash
         $this->value = $value;
     }
 
-    public static function fromIpAndUserAgent(IpAddress $ipAddress, string $userAgent): self
+    public static function fromIpAndUserAgent(IpAddress $ipAddress, UserAgent $userAgent): self
     {
-        $data = $ipAddress->getValue().'|'.$userAgent;
+        $data = $ipAddress->getValue().'|'.$userAgent->getValue();
         $hash = hash('sha256', $data);
 
         return new self($hash);
